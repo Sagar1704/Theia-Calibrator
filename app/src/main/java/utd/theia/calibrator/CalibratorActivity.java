@@ -1,15 +1,26 @@
 package utd.theia.calibrator;
 
+import android.content.ContentValues;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import utd.theia.database.MapContract;
+import utd.theia.database.MapDB;
+import utd.theia.enums.Direction;
 
 public class CalibratorActivity extends AppCompatActivity {
     private EditText fromEdit;
     private EditText toEdit;
+    private EditText distanceEdit;
+    private Spinner directionSpinner;
     private Button addButton;
 
     @Override
@@ -17,7 +28,12 @@ public class CalibratorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calibrator);
 
-
+        fromEdit = (EditText) findViewById(R.id.fromEdit);
+        toEdit = (EditText) findViewById(R.id.toEdit);
+        distanceEdit = (EditText) findViewById(R.id.distanceEdit);
+        directionSpinner = (Spinner) findViewById(R.id.directionSpinner);
+        directionSpinner.setAdapter(new ArrayAdapter<Direction>(this, android.R.layout.simple_list_item_1, Direction.values()));
+        addButton = (Button) findViewById(R.id.addButton);
     }
 
     @Override
@@ -40,5 +56,28 @@ public class CalibratorActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void add(View view) {
+        try {
+            MapDB db = new MapDB(getApplicationContext());
+
+            if (!fromEdit.getText().toString().isEmpty() &&
+                    !toEdit.getText().toString().isEmpty() &&
+                    !distanceEdit.getText().toString().isEmpty()) {
+                ContentValues values = new ContentValues();
+                values.put(MapContract.RoomIndicatorEntry.COLUMN_NAME_FROM, fromEdit.getText().toString());
+                values.put(MapContract.RoomIndicatorEntry.COLUMN_NAME_TO, toEdit.getText().toString());
+                values.put(MapContract.RoomIndicatorEntry.COLUMN_NAME_DISTANCE, distanceEdit.getText().toString());
+                values.put(MapContract.RoomIndicatorEntry.COLUMN_NAME_DIRECTION, ((Direction) directionSpinner.getSelectedItem()).toString());
+                db.upsert(MapContract.RoomIndicatorEntry.TABLE_NAME, null, MapContract.RoomIndicatorEntry.PRIMARY_KEY, values);
+
+                Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Check the input", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

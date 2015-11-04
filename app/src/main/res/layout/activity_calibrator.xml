@@ -10,27 +10,49 @@
 
     <EditText
         android:id="@+id/fromEdit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/toEdit"
+        android:layout_centerInParent="true"
         android:gravity="center"
         android:hint="FROM" />
 
     <EditText
         android:id="@+id/toEdit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:hint="TO" />
 
+    <EditText
+        android:id="@+id/distanceEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toEdit"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:hint="DISTANCE"
+        android:inputType="numberDecimal" />
+
+    <Spinner
+        android:id="@+id/directionSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/distanceEdit"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+    </Spinner>
+
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ADD"
-        android:layout_below="@+id/toEdit"
-        android:layout_centerInParent="true"/>
+        android:layout_below="@+id/directionSpinner"
+        android:layout_centerInParent="true"
+        android:onClick="add"
+        android:text="ADD" />
 
 
 </RelativeLayout>
