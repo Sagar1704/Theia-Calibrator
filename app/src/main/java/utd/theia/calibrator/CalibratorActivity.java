@@ -31,8 +31,8 @@ public class CalibratorActivity extends AppCompatActivity {
         fromEdit = (EditText) findViewById(R.id.fromEdit);
         toEdit = (EditText) findViewById(R.id.toEdit);
         distanceEdit = (EditText) findViewById(R.id.distanceEdit);
-        directionSpinner = (Spinner) findViewById(R.id.directionSpinner);
-        directionSpinner.setAdapter(new ArrayAdapter<Direction>(this, android.R.layout.simple_list_item_1, Direction.values()));
+//        directionSpinner = (Spinner) findViewById(R.id.directionSpinner);
+//        directionSpinner.setAdapter(new ArrayAdapter<Direction>(this, android.R.layout.simple_list_item_1, Direction.values()));
         addButton = (Button) findViewById(R.id.addButton);
     }
 
@@ -73,11 +73,24 @@ public class CalibratorActivity extends AppCompatActivity {
                 db.upsert(MapContract.RoomIndicatorEntry.TABLE_NAME, null, MapContract.RoomIndicatorEntry.PRIMARY_KEY, values);
 
                 Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+                reset();
             } else {
                 Toast.makeText(this, "Check the input", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void reset() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        fromEdit.setText("");
+        toEdit.setText("");
+        distanceEdit.setText("");
     }
 }
